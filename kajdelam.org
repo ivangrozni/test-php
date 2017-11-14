@@ -35,7 +35,8 @@
     Funkcija, ki prejme datum in profile_id in izračuna vsoto za en mesec.
     Skratka to je samo ena poizvedba:
 
-    ~SELECT SUM(view) FROM views WHERE date="$month" AND profile_id=$pid;~
+    ~SELECT SUM(view) FROM views WHERE date="$month" AND profile_id=$pid;~ Tole
+    smo nadomestili z lepšim queryjem, ki preveri manjše večje od datuma.
 
     Morda bi obstajal kak paket, ki močno olajša db poizvedbe. Ampak ne poznam
     paketa.
@@ -47,7 +48,6 @@
 
     Na koncu moram tabelo uredit po abecednem vrstem redu. 
 
-    
 **** lepa tabela uporabnikov
      imamo
 
