@@ -1,0 +1,56 @@
+* Testni dan d-labs
+  :LOGBOOK:
+  CLOCK: [2017-11-14 Tue 09:52]
+  :END:
+** priprava
+   - naredim uporabnika za mysql - ni potrebe - sem prečekiral setup.sql
+   - stestiram setup
+     - najbrž bo treba še nekje uporabnika in bazo prilagodit
+*** naučim se simphony
+    zgleda fino :)
+** razvoj
+   [2017-11-14 Tue 10:25]
+   - Dokončat moram fajl src/Command/ReportYearlyCommand.php
+     - izpisat mora lep report
+   - raziščem bazo - ima 2 tabeli, v eni so profili, v drugi so podatki
+   - naredim SQL query in potem z $io->table izpišem
+
+** za narest
+   - 5 test kejsov
+     - robni pogoji
+   - implementacija funkconalnosti
+
+*** glavno
+    - ko izvršim Yearly Views report -> mesečni pregled za posamezni profil
+    - ko pogledam Yearly Views report -> profili razporejeni po abecednem
+      vrstnem redu
+    - ko pogledam Yearly Views report -> mora pisat "n/a" za mesece, ko podatki
+      manjkajo
+
+*** poizvedbe v bazo
+    Za določeno leto, za določen profil, dobim različne mesece, več podatkov v
+    enem mesecu. Za določen profil moram seštet podatke v enem mesecu. Kako bom
+    hendlal datume? 
+
+    Funkcija, ki prejme datum in profile_id in izračuna vsoto za en mesec.
+    Skratka to je samo ena poizvedba:
+
+    ~SELECT SUM(view) FROM views WHERE date="$month" AND profile_id=$pid;~
+
+    Morda bi obstajal kak paket, ki močno olajša db poizvedbe. Ampak ne poznam
+    paketa.
+
+    Dobim tabelo profilov - asociativno polje pid in pname.
+
+    Grem čez tabelo za posamezno leto, ki ima dvanajst mesecev in sevede delam
+    seštevke. Zafiljujem še eno asociativno tabelo.
+
+    Na koncu moram tabelo uredit po abecednem vrstem redu. 
+
+    
+**** lepa tabela uporabnikov
+     imamo
+
+**** gremo po mesecih
+     [2017-11-14 Tue 11:52]
+     tabela: pid => [mesec => sum(views)]
