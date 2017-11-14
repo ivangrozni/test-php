@@ -15,7 +15,7 @@ class ReportYearlyCommand extends ContainerAwareCommand
         $this
             ->setName('report:profiles:yearly')
             ->setDescription('Page views report')
-            ->addArgument('year', InputArgument::OPTIONAL, 'Year you are interested in.')
+            ->addArgument('year', InputArgument::REQUIRED, 'Year you are interested in.')
         ;
     }
 
@@ -45,13 +45,12 @@ class ReportYearlyCommand extends ContainerAwareCommand
                 if (date('m', $time)==$month)
                     $list[]=date('Y-m-d', $time);
             }
-            //print_r($list);
             return $list;
         }
 
        function profilePerMonth($db, $pid, $month, $year) {
-            $views = array();
             $days = daysInMonth($month, $year);
+            //print(end($days)."\t"); // to check if the february has enough days
             $sql = "SELECT SUM(views) FROM views WHERE date > ? AND date < ? AND profile_id = ?";
             $stmt = $db->prepare($sql);
             $stmt->bindValue(1, $days[0]);
@@ -59,7 +58,6 @@ class ReportYearlyCommand extends ContainerAwareCommand
             $stmt->bindValue(3, $pid);
             $stmt->execute();
             $results = $stmt->fetchAll();
-            //print_r($results[0]['SUM(views)']);
             $ppm = $results[0]['SUM(views)'];
             if (is_numeric($ppm)) {
                 return number_format($ppm);
@@ -68,27 +66,19 @@ class ReportYearlyCommand extends ContainerAwareCommand
         }
 
         asort($profs);
-        //print_r($aprofs);
 
-        $pidByYear = array();
+        //$pidByYear = array();
         $pnameByYear = array();
         foreach ($profs as $pid => $pname) {
             $profileByMonth = array();
             for($m = 1; $m < 13; $m++) {
                 $profileByMonth[$m] = profilePerMonth($db, $pid, $m, $year);
             }
-            $pidByYear[$pid] = $profileByMonth;
+            //$pidByYear[$pid] = $profileByMonth;
             $pnameByYear[$pid] = array_merge([$pname], $profileByMonth);
         }
 
-
-
-        // Show data in a table - headers, data
-
         //$io->table(["Profile\t".$year], $profiles);
-
-        //profilePerMonth($db, 1, 10, $year);
-        //print_r($pidByYear);
         $tableName = "Profile    ".$year;
         $tableHead = [$tableName, 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 

@@ -54,3 +54,31 @@
 **** gremo po mesecih
      [2017-11-14 Tue 11:52]
      tabela: pid => [mesec => sum(views)]
+
+*** testi in optimizacija kode
+    [2017-11-14 Tue 15:38] prišel z malice...
+
+**** Robni pogoji
+     - letnica je out of range (navzgor in navzdol)
+     - 2016 je prestopno leto - februar ima 29 dni
+     - ??? ni uporabnikov
+
+**** testi
+     1. Za mesece brez podatkov, se izpiše "n/a".
+     2. Preveri, če koda upošteva, da je februar prestopni mesec.
+     3. Scenario: year argument not given
+        Notify user, he should call the console with year argument = print help.
+     4. Check if the profile data correspodns with sum of monthly views for specific profile.
+     
+     Scenario: get report for year X
+       Make SQL query for each month
+       Write Monthly data in Yearly array
+       Write Yearly data in Profile array
+       Structure data that it will be suitable for output report
+       Given that there is data for year X
+
+     Scenario: year argument for report generation not given
+       Throw exception - year argument is required
+
+     This means that Not enough arguments exception - is a feature.
+       
